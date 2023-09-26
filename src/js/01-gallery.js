@@ -1,8 +1,8 @@
-import SimpleLightbox from "simplelightbox"; // Імпорт бібліотеки
+import SimpleLightbox from "simplelightbox"; 
 
-import "simplelightbox/dist/simple-lightbox.min.css"; // Імпорт CSS стилів
+import "simplelightbox/dist/simple-lightbox.min.css"; 
 
-import { galleryItems } from "./gallery-items.js"; // Імпорт галереї зображень
+import { galleryItems } from "./gallery-items.js"; 
 
 document.addEventListener("DOMContentLoaded", function () {
 
