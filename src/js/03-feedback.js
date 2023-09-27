@@ -1,58 +1,44 @@
 import throttle from 'lodash.throttle';
 
-const feedbackForm = document.querySelector('.feedback-form');
-const emailInput = feedbackForm.querySelector('input[name="email"]');
-const messageTextarea = feedbackForm.querySelector('textarea[name="message"]');
+if (typeof Storage !== 'undefined') {
+  
+    const form = document.querySelector('.feedback-form');
+    const emailInput = form.querySelector('input[name="email"]');
+    const messageTextarea = form.querySelector('textarea[name="message"]');
+  
+    const savedState =
+      JSON.parse(localStorage.getItem('feedback-form-state')) || {};
+ 
+    emailInput.value = savedState.email || '';
+    messageTextarea.value = savedState.message || '';
+ 
+    const saveStateWithThrottle = throttle(() => {
+  
+      const state = {
+        email: emailInput.value,
+        message: messageTextarea.value,
+      };
 
-// Функція для зберігання стану форми в локальному сховищі
-const saveFormState = () => {
-  const formState = {
-    email: emailInput.value,
-    message: messageTextarea.value,
-  };
-  localStorage.setItem('feedback-form-state', JSON.stringify(formState));
-};
+      localStorage.setItem('feedback-form-state', JSON.stringify(state));
+    }, 500);
+ 
+    emailInput.addEventListener('input', saveStateWithThrottle);
+    messageTextarea.addEventListener('input', saveStateWithThrottle);
+  
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+  
+      localStorage.removeItem('feedback-form-state');
 
-// Функція для відображення збереженого стану форми з локального сховища
-const restoreFormState = () => {
-  const savedState = localStorage.getItem('feedback-form-state');
-  if (savedState) {
-    const formState = JSON.parse(savedState);
-    emailInput.value = formState.email;
-    messageTextarea.value = formState.message;
+      const email = emailInput.value;
+      const message = messageTextarea.value;
+
+      console.log({ email, message });
+
+      emailInput.value = '';
+      messageTextarea.value = '';
+    });
+
+  } else {
+    console.error('Local storage is not supported in this browser.');
   }
-};
-
-// Встановлення обробників подій для полів вводу
-emailInput.addEventListener(
-  'input',
-  throttle(() => {
-    saveFormState();
-  }, 500)
-);
-
-messageTextarea.addEventListener(
-  'input',
-  throttle(() => {
-    saveFormState();
-  }, 500)
-);
-
-// Перевірка наявності збереженого стану та відображення його
-restoreFormState();
-
-// Встановлення обробника події submit для форми
-feedbackForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  // Очищення локального сховища та полів форми
-  localStorage.removeItem('feedback-form-state');
-  emailInput.value = '';
-  messageTextarea.value = '';
-
-  // Виведення даних у консоль
-  console.log({
-    email: emailInput.value,
-    message: messageTextarea.value,
-  });
-});

@@ -4,7 +4,6 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 import { galleryItems } from "./gallery-items.js"; 
 
-document.addEventListener("DOMContentLoaded", function () {
 
   const galleryUl = document.querySelector(".gallery");
 
@@ -31,4 +30,3 @@ document.addEventListener("DOMContentLoaded", function () {
     captionsData: "alt",
     captionDelay: 250,
   });
-});
