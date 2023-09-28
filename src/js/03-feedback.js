@@ -33,6 +33,11 @@ if (typeof Storage !== 'undefined') {
       const email = emailInput.value;
       const message = messageTextarea.value;
 
+      if (!email || !message) {
+        alert ("Please fill out both fields.");
+        return;
+      }
+
       console.log({ email, message });
 
       emailInput.value = '';
